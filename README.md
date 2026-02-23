@@ -9,4 +9,7 @@ Optional sub-questions:
 2. Are they better than PCA / autoencoders?
 3. Which phenotypes are confused?
 
+## Data :
+Experiments were conducted on a subset of the BBBC021 dataset consisting of three plates from Week 1.
+
 
