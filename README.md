@@ -5,6 +5,25 @@ Self-supervised learning on biological images : Representation Learning for Imag
 Can self-supervised representation learning on microscopy images recover biologically meaningful groupings of cellular perturbations without labels?
 
 Optional sub-questions:
+
+Q: Can representations recover Mechanism of Action?
+MOA distribution plot
+UMAP colored by MOA
+MOA classification accuracy
+
+Q: What structure do learned embeddings capture?
+Multichannel contrastive learning
+Probing tasks
+Ablation studies
+Discussion of invariances
+
+Q: What cellular morphologies emerge?
+Single-cell segmentation
+Cell-level embeddings
+Phenotype maps
+Example cell images per cluster
+
+Comparison of feature types (raw, PCA, SSL)
 1. Do SSL embeddings cluster by perturbation?
 2. Are they better than PCA / autoencoders?
 3. Which phenotypes are confused?
