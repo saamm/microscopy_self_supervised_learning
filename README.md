@@ -2,34 +2,38 @@
 Self-supervised learning on biological images : Representation Learning for Image-based Drug Profiling in High-Content Microscopy 
 
 ## Project Objective:
-Can self-supervised representation learning on microscopy images recover biologically meaningful groupings of cellular perturbations without labels?
+High-content microscopy enables systematic profiling of drug-induced cellular phenotypes. This project explores whether self-supervised representation learning can recover biological mechanisms of action from multichannel fluorescence images.
 
-Optional sub-questions:
-
-Q: Can representations recover Mechanism of Action?
-MOA distribution plot
-UMAP colored by MOA
-MOA classification accuracy
-
-Q: What structure do learned embeddings capture?
-Multichannel contrastive learning
-Probing tasks
-Ablation studies
-Discussion of invariances
-
-Q: What cellular morphologies emerge?
-Single-cell segmentation
-Cell-level embeddings
-Phenotype maps
-Example cell images per cluster
-
-Comparison of feature types (raw, PCA, SSL)
-1. Do SSL embeddings cluster by perturbation?
-2. Are they better than PCA / autoencoders?
-3. Which phenotypes are confused?
+## Scientific Questions
+Can learned embeddings separate drugs by MOA? <br>
+What invariances are captured by contrastive learning across channels? <br>
+What morphological phenotypes emerge at single-cell level? <br>
 
 ## Data :
-Experiments were conducted on a subset of the BBBC021 dataset consisting of three plates from Week 1.
+BBBC021 <br>
+3 channels: DAPI, Tubulin, Actin <br>
+X compounds, Y MOAs. <br>
+
+## Methods
+Image preprocessing <br>
+Contrastive learning (SimCLR / BYOL style) <br>
+UMAP visualization <br>
+MOA classification <br>
+Single-cell clustering <br>
+
+## Results
+
+
+## Biological Interpretation
+
+
+## Future Work
+
+
+
+
+
+
 
 ## Structure
 ```
