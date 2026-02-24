@@ -55,7 +55,7 @@ microscopy-drug-profiling/
 │   ├── 04_representation_learning.ipynb
 │   ├── 05_embedding_analysis.ipynb
 │   ├── 06_moa_prediction.ipynb
-│   ├── 07_single_cell_analysis.ipynb   # optional advanced
+│   ├── 07_single_cell_analysis.ipynb   # Maybe
 │   └── 08_biological_interpretation.ipynb
 │
 ├── src/
