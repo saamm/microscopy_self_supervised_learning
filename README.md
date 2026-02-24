@@ -1,5 +1,5 @@
 # microscopy_self_supervised_learning
-Self-supervised learning on biological images
+Self-supervised learning on biological images : Representation Learning for Image-based Drug Profiling in High-Content Microscopy 
 
 ## Project Objective:
 Can self-supervised representation learning on microscopy images recover biologically meaningful groupings of cellular perturbations without labels?
