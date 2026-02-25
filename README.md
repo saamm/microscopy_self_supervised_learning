@@ -49,14 +49,16 @@ microscopy-drug-profiling/
 │   └── splits/               # train/val/test splits
 │
 ├── notebooks/
-│   ├── 01_exploration.ipynb
-│   ├── 02_metadata_analysis.ipynb
-│   ├── 03_preprocessing.ipynb
-│   ├── 04_representation_learning.ipynb
-│   ├── 05_embedding_analysis.ipynb
-│   ├── 06_moa_prediction.ipynb
-│   ├── 07_single_cell_analysis.ipynb   # Maybe
-│   └── 08_biological_interpretation.ipynb
+├── 01_exploration.ipynb
+├── 02_metadata_analysis.ipynb
+├── 03_preprocessing.ipynb
+├── 04_baseline_pca.ipynb
+├── 05_autoencoder.ipynb
+├── 06_ssl_training.ipynb
+├── 07_visualization.ipynb
+├── 08_metrics.ipynb
+│── 09_single_cell_analysis.ipynb   # Maybe
+│── 10_biological_interpretation.ipynb
 │
 ├── src/
 │   ├── data_loader.py
@@ -88,6 +90,32 @@ microscopy-drug-profiling/
     ├── project_report.pdf
     └── figures/
 ```
+
+Notebook Descriptions
+
+01_exploration.ipynb
+Initial data inspection and visualization of raw microscopy images (DAPI, Tubulin, Actin channels). This notebook validates image integrity, resolution consistency, and basic intensity statistics.
+
+02_metadata_analysis.ipynb
+Exploration of experimental metadata including compound distributions, concentrations, mechanisms of action (MOA), replicate structure, and plate-level batch effects.
+
+03_preprocessing.ipynb
+Prepares microscopy images for representation learning by loading multi-channel images, applying per-channel normalization, resizing to CNN-compatible resolution, and saving processed tensors for downstream modeling.
+
+04_baseline_pca.ipynb
+Establishes a classical baseline by flattening images and applying PCA to evaluate whether low-dimensional embeddings capture coarse phenotypic structure and MOA separation.
+
+05_autoencoder.ipynb
+Trains a convolutional autoencoder to learn compact latent representations of cellular morphology in an unsupervised manner.
+
+06_ssl_training.ipynb
+Implements self-supervised representation learning (e.g., SimCLR-style contrastive learning) to learn biologically meaningful embeddings from microscopy images without using MOA labels during training.
+
+07_visualization.ipynb
+Visualizes learned embeddings using UMAP/t-SNE, colored by MOA, compound, and plate to assess biological signal and batch effects.
+
+08_metrics.ipynb
+Quantitatively evaluates learned representations via downstream classification of Mechanism of Action (MOA), using proper compound-level cross-validation to avoid information leakage.
 
 
 
