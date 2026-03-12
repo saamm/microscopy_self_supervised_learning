@@ -13,6 +13,8 @@ What morphological phenotypes emerge at single-cell level? <br>
 BBBC021 <br>
 3 channels: DAPI, Tubulin, Actin <br>
 X compounds, Y MOAs. <br>
+<br>
+Currently experimentations is done with Week 1 plate, including Week 2, 3 and perhaps 4 for a rich knowledge base <br>
 
 ## Methods
 Image preprocessing <br>
