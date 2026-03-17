@@ -20,6 +20,7 @@ get_ipython().run_line_magic('cd', '/content/drive/MyDrive/Colab \\Notebooks/mic
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 sns.set(style="whitegrid")
 
@@ -27,13 +28,39 @@ sns.set(style="whitegrid")
 # In[4]:
 
 
-metadata_with_moa = pd.read_csv("data/processed/metadata_with_moa.csv")
-metadata_with_moa.head(3)
+metadata = pd.read_csv("data/processed/metadata_with_moa.csv")
+metadata.head(3)
+
+
+# Treating Missing Data
+
+# In[5]:
+
+
+def image_exists(row):
+    paths = [
+        os.path.join(BASE_DIR, row["Image_PathName_DAPI"], row["Image_FileName_DAPI"]),
+        os.path.join(BASE_DIR, row["Image_PathName_Tubulin"], row["Image_FileName_Tubulin"]),
+        os.path.join(BASE_DIR, row["Image_PathName_Actin"], row["Image_FileName_Actin"])
+    ]
+
+    return all(os.path.exists(p) for p in paths)
+
+
+# In[6]:
+
+
+BASE_DIR = "/content/drive/MyDrive/Colab Notebooks/microscopy_self_supervised_learning/microscopy_self_supervised_learning/data/raw"
+metadata_with_moa = metadata[metadata.apply(image_exists, axis=1)].reset_index(drop=True)
+
+print("Original rows:", len(metadata))
+print("Valid rows:", len(metadata_with_moa))
+print("Removed rows:", len(metadata) - len(metadata_with_moa))
 
 
 # Step 1: Load & stack channels - Merging channels for faster traianing time
 
-# In[19]:
+# In[7]:
 
 
 import os
@@ -42,6 +69,7 @@ import tifffile as tiff
 import matplotlib.pyplot as plt
 from skimage.filters import threshold_otsu
 from skimage.transform import resize
+from tqdm import tqdm
 
 BASE_DIR = "/content/drive/MyDrive/Colab Notebooks/microscopy_self_supervised_learning/microscopy_self_supervised_learning/data/raw"
 
@@ -58,7 +86,7 @@ def load_triplet_from_metadata(row):
     return np.stack([dapi, tubulin, actin], axis=0)  # (3, H, W)
 
 
-# In[6]:
+# In[8]:
 
 
 row = metadata_with_moa.iloc[0]
@@ -67,7 +95,7 @@ img = load_triplet_from_metadata(row)
 print(img.shape)  # should be (3, 1024, 1280)
 
 
-# In[7]:
+# In[9]:
 
 
 print("Shape:", img.shape)
@@ -77,7 +105,7 @@ print("Max:", img.max())
 
 # 6 Intensity Clipping
 
-# In[8]:
+# In[10]:
 
 
 def clip_intensity(img):
@@ -94,7 +122,7 @@ def clip_intensity(img):
     return clipped
 
 
-# In[9]:
+# In[11]:
 
 
 img_clipped = clip_intensity(img)
@@ -103,7 +131,7 @@ print("Before max:", img.max())
 print("After max:", img_clipped.max())
 
 
-# In[10]:
+# In[12]:
 
 
 plt.hist(img[0].flatten(), bins=100)
@@ -145,7 +173,7 @@ def scale_to_unit(img):
     return scaled
 
 
-# In[17]:
+# In[15]:
 
 
 img_scaled = scale_to_unit(img_clipped)
@@ -157,7 +185,7 @@ print("dtype:", img_scaled.dtype)
 
 # 8 Compute Otsu DNA mask
 
-# In[20]:
+# In[16]:
 
 
 def compute_dna_mask(img_scaled):
@@ -171,7 +199,7 @@ def compute_dna_mask(img_scaled):
     return mask, thresh
 
 
-# In[21]:
+# In[17]:
 
 
 mask, thresh = compute_dna_mask(img_scaled)
@@ -187,7 +215,7 @@ plt.show()
 
 # 9 Random crop sampler (224×224)
 
-# In[22]:
+# In[18]:
 
 
 def random_crop(img, mask, crop_size=224):
@@ -205,7 +233,7 @@ def random_crop(img, mask, crop_size=224):
 
 # 10 Keep crops with cells (>=1% DNA)
 
-# In[23]:
+# In[19]:
 
 
 def sample_valid_crop(img_scaled, mask, crop_size=224):
@@ -222,7 +250,7 @@ def sample_valid_crop(img_scaled, mask, crop_size=224):
     return None
 
 
-# In[24]:
+# In[20]:
 
 
 crop = sample_valid_crop(img_scaled, mask)
@@ -232,7 +260,7 @@ print("Crop shape:", crop.shape)
 
 # 11 Visualize crop
 
-# In[25]:
+# In[21]:
 
 
 fig, axes = plt.subplots(1,3, figsize=(10,4))
@@ -246,7 +274,7 @@ plt.show()
 
 # 12 Resize to training resolution
 
-# In[26]:
+# In[22]:
 
 
 def resize_for_model(img):
@@ -258,7 +286,7 @@ def resize_for_model(img):
 
 # 13 Full preprocessing pipeline
 
-# In[27]:
+# In[23]:
 
 
 def preprocess_image(row):
@@ -273,6 +301,10 @@ def preprocess_image(row):
 
     crop = sample_valid_crop(img, mask)
 
+    # If no correct crop is found
+    if crop is None:
+        return None
+
     crop = resize(crop, (3,128,128), anti_aliasing=True)
 
     return crop
@@ -280,7 +312,7 @@ def preprocess_image(row):
 
 # 14 Full Sanity Check
 
-# In[28]:
+# In[24]:
 
 
 sample = preprocess_image(metadata_with_moa.iloc[0])
@@ -292,7 +324,7 @@ print("Max:", sample.max())
 
 # 15 Visualize final input to model
 
-# In[29]:
+# In[25]:
 
 
 fig, axes = plt.subplots(1,3, figsize=(10,4))
@@ -302,4 +334,65 @@ for i in range(3):
     axes[i].axis("off")
 
 plt.show()
+
+
+# Saving x and y arrays for further computation
+
+# In[26]:
+
+
+X = []
+y = []
+
+
+# In[28]:
+
+
+for _, row in tqdm(metadata_with_moa.iterrows(), total=len(metadata_with_moa)):
+
+    # Load image
+    img = preprocess_image(row)
+
+    #if shapes are different first time
+    if img is None:
+      continue
+
+    X.append(img)
+    # store moa + compound
+    y.append([row["moa"], row["compound"], row["concentration"]])
+
+
+# In[29]:
+
+
+X = np.array(X)
+y = np.array(y)
+
+print("X shape:", X.shape)
+print("y shape:", y.shape)
+
+
+# In[30]:
+
+
+np.save("data/splits/X_images.npy", X)
+np.save("data/splits/y_labels.npy", y)
+
+print("Saved processed dataset.")
+
+
+# In[31]:
+
+
+#sanity check
+X = np.load("data/splits/X_images.npy")
+y = np.load("data/splits/y_labels.npy")
+
+print(X.shape)
+
+
+# In[32]:
+
+
+print("y shape:", y.shape)
 
