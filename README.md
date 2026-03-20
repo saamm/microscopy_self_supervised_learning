@@ -47,114 +47,112 @@ Impact of dataset scale on SSL representation learning
 ⚙️ Methods
 🔬 Preprocessing
 
-Intensity clipping and normalization
-
-DNA mask-based cropping
-
-Resize to 128×128
-
-Channel-wise scaling to [-1, 1]
+    Intensity clipping and normalization
+    DNA mask-based cropping
+    Resize to 128×128
+    Channel-wise scaling to [-1, 1]
 
 🧠 Representation Learning
-Self-Supervised Models
-
-SimCLR (ViT backbone)
-
-SimCLR (ResNet18)
-
-with and without ImageNet pretraining
-
-DINO (ViT, teacher–student EMA)
-
-MAE (Masked Autoencoder)
-
-Baselines
-
-PCA (flattened images)
-
-Convolutional Autoencoder
+    Self-Supervised Models
+    
+    SimCLR (ViT backbone)
+    
+    SimCLR (ResNet18)
+    
+    with and without ImageNet pretraining
+    
+    DINO (ViT, teacher–student EMA)
+    
+    MAE (Masked Autoencoder)
+    
+    Baselines
+    
+    PCA (flattened images)
+    
+    Convolutional Autoencoder
 
 📉 Visualization
 
-PCA → global structure
-
-UMAP → local structure
+    PCA → global structure
+    
+    UMAP → local structure
 
 Colored by:
 
-MOA
-
-Compound
-
-Concentration
+    MOA
+    
+    Compound
+    
+    Concentration
 
 📊 Downstream Evaluation
 
-MOA classification (kNN, cosine similarity)
-
-LOCO (Leave-One-Compound-Out) validation
-
-Replicate consistency
-
-Single-cell clustering
+    MOA classification (kNN, cosine similarity)
+    
+    LOCO (Leave-One-Compound-Out) validation
+    
+    Replicate consistency
+    
+    Single-cell clustering
 
 🔍 Key Findings (So Far)
 🧠 Representation Behavior
 
-SimCLR learns smooth manifolds, not discrete clusters
-
-Weak separation by MOA across all models
-
-Embeddings dominated by global morphology, not mechanism
+    SimCLR learns smooth manifolds, not discrete clusters
+    
+    Weak separation by MOA across all models
+    
+    Embeddings dominated by global morphology, not mechanism
 
 📉 Data Efficiency Insight (Core Result)
 
-Increasing data (from 1 plate → 10 plates):
+Increasing data (from 3 plate → 10 plates):
 
-Improves stability of embeddings
-
-Does not significantly improve MOA separability
-
-LOCO accuracy remains near random (~5–10%)
+    Improves stability of embeddings
+    
+    Does not significantly improve MOA separability
+    
+    LOCO accuracy remains near random (~5–10%)
 
 👉 Key takeaway:
 
-More data alone does not guarantee biologically meaningful representations in SSL
+More data alone does not guarantee biologically meaningful representations in SSL or 
+it is a very data hungry task and needs 100 weeks of data instead of 10.
 ⚠️ Critical Observation
 
-PCA baseline performs similarly to SSL embeddings
-
-Suggests SSL is not learning additional discriminative biological signal
+    PCA baseline performs similarly to SSL embeddings
+    
+    Suggests SSL is not learning additional discriminative biological signal
 
 🧪 Biological Interpretation
 
-Learned features likely capture:
-
-Cell density
-
-Intensity variation
-
-Cell cycle / morphology continuum
-
-Weak alignment with:
-
-Drug mechanism
-
-Functional phenotypes
+    Learned features likely capture:
+    
+    Cell density
+    
+    Intensity variation
+    
+    Cell cycle / morphology continuum
+    
+    Weak alignment with:
+    
+    Drug mechanism
+    
+    Functional phenotypes
 
 🚀 Future Work
 
-Improve augmentations (biology-aware, channel-specific)
-
-Multi-scale crops (DINO-style)
-
-Stronger inductive biases (ResNet + pretrained)
-
-Hybrid objectives (SSL + weak supervision)
-
-Batch-effect correction across plates
-
-Investigate why more data ≠ better biology
+    Improve augmentations (biology-aware, channel-specific)
+    
+    Multi-scale crops (DINO-style)
+    
+    Stronger inductive biases (ResNet + pretrained)
+    
+    Hybrid objectives (SSL + weak supervision)
+    
+    Batch-effect correction across plates
+    
+    Investigate why more data ≠ better biology
 
 
 
@@ -165,8 +163,6 @@ Investigate why more data ≠ better biology
 microscopy-drug-profiling/
 │
 ├── README.md
-├── environment.yml
-├── requirements.txt
 │
 ├── data/
 │   ├── raw/                  # original images + metadata (not pushed to GitHub)
@@ -186,12 +182,7 @@ microscopy-drug-profiling/
 │── 10_biological_interpretation.ipynb
 │
 ├── src/
-│   ├── data_loader.py
 │   ├── preprocessing.py
-│   ├── model.py
-│   ├── train.py
-│   ├── evaluate.py
-│   ├── visualization.py
 │
 ├── results/
 │   ├── figures/
@@ -205,11 +196,6 @@ microscopy-drug-profiling/
 │   ├── tables/
 │   │   ├── moa_accuracy.csv
 │   │   └── compound_counts.csv
-│
-├── experiments/
-│   ├── config_ssl.yaml
-│   ├── config_baseline.yaml
-│   └── logs/
 │
 └── report/
     ├── project_report.pdf
